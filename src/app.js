@@ -1,23 +1,38 @@
 const express = require('express');
+require("./config/database")
+const connectDB= require("./config/database")
+const User = require("./models/user")
+
+
 const app = express();
 
 
-app.use('/hello',(req,res)=>{
-    res.send('this is a default  code motherfuckers');
+app.post("/signUp", async(req,res)=>{
+    const userObj={
+        firstName:'Harsh',
+        lastName:'Sharma',
+        email:'Harshsharma@gmail.com',
+        password:'Harsh123',
+        age:24,
+        gender:"male"
+    }
+
+    const user = new User(userObj)
+
+    await user.save()
+
+    res.send("user date saved successfully")
 })
 
-app.post('/hello', (req, res) => {
-    const response = {
-        firstName: 'Parth',
-        lastName: 'Bhardwaj'
-    };
-    res.send(`${JSON.stringify(response)} this is a POST request!`);
-});
 
-app.delete('/hello',(req, res)=>{
-    res.send('This is a DELETE request!');
+connectDB()
+.then(()=>{
+    console.log("connected to database")
+    app.listen(3000, () => {
+        console.log('Server is running on port 3000');
+    });
+})
+.catch((err)=>{
+    console.log('database can not be connected')
 })
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
