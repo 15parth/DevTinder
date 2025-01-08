@@ -18,6 +18,45 @@ app.post("/signUp", async(req,res)=>{
 })
 
 
+app.get("/user", async(req,res)=>{
+    const userEmail= req.body.email;
+
+    try{
+        const user= await User.find({email:userEmail})
+       
+        if(user.length===0){
+            res.status(404).send("user not found")
+        }
+        else{
+            res.send(user)
+        }
+    }
+    catch{
+           res.status(400).send("something went wrong")
+    }
+})
+
+
+
+app.get("/feed", async(req,res)=>{
+    const userEmail= req.body.email;
+
+    try{
+        const user= await User.find({})
+       
+        if(user.length===0){
+            res.status(404).send("users not found")
+        }
+        else{
+            res.send(user)
+        }
+    }
+    catch{
+           res.status(400).send("something went wrong")
+    }
+})
+
+
 connectDB()
 .then(()=>{
     console.log("connected to database")
